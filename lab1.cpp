@@ -38,7 +38,7 @@
 #define WINDOW_WIDTH  800
 #define WINDOW_HEIGHT 600
 
-#define MAX_PARTICLES 10000
+#define MAX_PARTICLES 99999
 #define GRAVITY .1
 
 //X Windows variables
@@ -94,8 +94,8 @@ int main(void)
 	//declare a box shape
 	game.box[0].width = 100;
 	game.box[0].height = 10;
-	game.box[0].center.x = 250 + 5*65;
-	game.box[0].center.y = 480 - 5*60;
+	game.box[0].center.x = 300 + 5*65;
+	game.box[0].center.y = 450 - 5*60;
 
 	game.box[1].width = 100;
 	game.box[1].height = 10;
@@ -104,8 +104,8 @@ int main(void)
 
 	game.box[2].width = 100;
 	game.box[2].height = 10;
-	game.box[2].center.x = -50 + 5*65;
-	game.box[2].center.y = 520 - 5*60;
+	game.box[2].center.x = -100 + 5*65;
+	game.box[2].center.y = 550 - 5*60;
 
 
 
@@ -191,7 +191,7 @@ void makeParticle(Game *game, int x, int y) {
 	p->s.center.x = x;
 	p->s.center.y = y;
 	p->velocity.y =  rnd();
-	p->velocity.x =  1.0 + rnd() * 0.5;
+	p->velocity.x =  .5 + rnd() * rnd();
 	game->n++;
 }
 
@@ -254,7 +254,7 @@ void movement(Game *game)
 	if (game->n <= 0)
 		return;
 
-	for(int i=0; i<10; i++)
+	for(int i=0; i<100; i++)
 	        makeParticle(game, game->lastMousex, game->lastMousey);
 
 	for(int i = 0; i<game->n; i++){
@@ -273,6 +273,12 @@ void movement(Game *game)
 		  	  	p->s.center.x >= s->center.x - s->width &&
 		 	        p->s.center.x <= s->center.x + s->width){
 	    	  	  p->velocity.y *= -.3;
+			  p->velocity.y += rnd();
+			  int pos = 0;
+			  pos = rnd() - rnd();
+			  if( pos < 0 )
+			      pos *= -1;
+			  p->velocity.x += pos;
 			  p->s.center.y = s->center.y + s->height +.001;
 			  }
 		}
@@ -316,8 +322,8 @@ void render(Game *game)
 		glPushMatrix();
 		glColor3ub(150,160,220);
 		Vec *c = &game->particle[i].s.center;
-		w = 2;
-		h = 2;
+		w = .5;
+		h = .5;
 		glBegin(GL_QUADS);
 			glVertex2i(c->x-w, c->y-h);
 			glVertex2i(c->x-w, c->y+h);
