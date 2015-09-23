@@ -38,8 +38,8 @@
 #define WINDOW_WIDTH  800
 #define WINDOW_HEIGHT 600
 
-#define MAX_PARTICLES 200000
-#define GRAVITY .1
+#define MAX_PARTICLES 40000
+#define GRAVITY .2
 
 //X Windows variables
 Display *dpy;
@@ -92,21 +92,30 @@ int main(void)
 	game.n=0;
 
 	//declare a box shape
-	game.box[0].width = 100;
+	game.box[0].width = 50;
 	game.box[0].height = 10;
-	game.box[0].center.x = 300 + 5*65;
-	game.box[0].center.y = 450 - 5*60;
+	game.box[0].center.x = 200 + 5*65;
+	game.box[0].center.y = 480 - 5*60;
 
-	game.box[1].width = 100;
+	game.box[1].width = 50;
 	game.box[1].height = 10;
 	game.box[1].center.x = 100 + 5*65;
 	game.box[1].center.y = 500 - 5*60;
 
-	game.box[2].width = 100;
+	game.box[2].width = 50;
 	game.box[2].height = 10;
-	game.box[2].center.x = -100 + 5*65;
-	game.box[2].center.y = 550 - 5*60;
+	game.box[2].center.x = 0 + 5*65;
+	game.box[2].center.y = 520 - 5*60;
 
+	game.box[3].width = 50;
+        game.box[3].height = 10;
+	game.box[3].center.x = -100 + 5*65;
+	game.box[3].center.y = 540 - 5*60;
+
+	game.box[4].width = 50;
+        game.box[4].height = 10;
+	game.box[4].center.x = -200 + 5*65;
+	game.box[4].center.y = 560 - 5*60;
 
 
 	//start animation
@@ -263,7 +272,7 @@ void movement(Game *game)
 		p->s.center.y += p->velocity.y;
 		p->velocity.y -= GRAVITY;
 
-		for(int j = 0; j<3; j++){
+		for(int j = 0; j<5; j++){
 		Shape *s  = &game->box[j];
 
 		//check for collision with shapes...
@@ -299,7 +308,7 @@ void render(Game *game)
 	float w, h;
 	glClear(GL_COLOR_BUFFER_BIT);
 	//Draw shapes...
-	for(int i =0; i<3; i++){
+	for(int i =0; i<5; i++){
 		//draw box
 		Shape *s;
 		glColor3ub(90,140,90);
