@@ -65,6 +65,7 @@ struct Particle {
 
 struct Game {
 	Shape box[5];
+	Shape circle[2];
 	Particle particle[MAX_PARTICLES];
 	int n;
 	int lastMousex;
@@ -116,6 +117,15 @@ int main(void)
         game.box[4].height = 10;
 	game.box[4].center.x = -200 + 5*65;
 	game.box[4].center.y = 560 - 5*60;
+
+	game.circle[0].center.x = -400 + 5*65;
+	game.circle[0].center.y = 50 + 5*65;
+	game.circle[0].radius = 50;
+
+	game.circle[1].center.x = 400 + 5*65;
+        game.circle[1].center.y = -400 + 5*65;
+	game.circle[1].radius = 200;
+
 
 
 	//start animation
@@ -194,7 +204,7 @@ void init_opengl(void)
 void makeParticle(Game *game, int x, int y) {
 	if (game->n >= MAX_PARTICLES)
 		return;
-	std::cout << "makeParticle() " << x << " " << y << std::endl;
+	//std::cout << "makeParticle() " << x << " " << y << std::endl;
 	//position of particle
 	Particle *p = &game->particle[game->n];
 	p->s.center.x = x;
@@ -275,7 +285,7 @@ void movement(Game *game)
 		for(int j = 0; j<5; j++){
 		Shape *s  = &game->box[j];
 
-		//check for collision with shapes...
+		//check for collision with box shapes...
 		//Shape *s;
 			if( p->s.center.y < s->center.y + s->height &&
 			        p->s.center.y > s->center.y - s->height &&
@@ -292,9 +302,17 @@ void movement(Game *game)
 			  }
 		}
 
+		//check for collision with circle
+		
+		//for(int i=1; i<2; i++){
+		//    Shape *s = &game->circle[i];
+		    //if(p->s.center.y <
+		//}
+
+
 		//check for off-screen
 		if (p->s.center.y < 0.0 || p->s.center.y > WINDOW_HEIGHT ) {
-			std::cout << "off screen" << std::endl;
+			//std::cout << "off screen" << std::endl;
 			memcpy(&game->particle[i],  &game->particle[game->n-1], sizeof(Particle));
 			game->n--;
 		}
@@ -325,6 +343,26 @@ void render(Game *game)
 		glEnd();
 		glPopMatrix();
 		}
+	//Draw Circles
+	for(int i=0; i<2; i++){
+	        Shape *s;
+		glColor3ub(90,140,90);
+		s= &game->circle[i];
+
+		int triangles=40000;
+
+		glBegin(GL_TRIANGLE_FAN);
+		glVertex2f(s->center.x, s->center.y);
+
+		for(int i = 0; i <= triangles; i++){
+		    glVertex2f(
+			    s->center.x + (s->radius *cos(i*(2 * 3.14159)/triangles)),
+			    s->center.y + (s->radius *sin(i*(2 * 3.14159)/triangles))
+			    );
+		    
+		}
+		glEnd();
+	}
 
 	//draw all particles here
 	for(int i = 0; i<game->n; i++){
