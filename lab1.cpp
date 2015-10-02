@@ -304,10 +304,30 @@ void movement(Game *game)
 
 		//check for collision with circle
 		
-		//for(int i=1; i<2; i++){
-		//    Shape *s = &game->circle[i];
-		    //if(p->s.center.y <
-		//}
+		for(int l=0; l<2; l++){
+		    Shape *s = &game->circle[l];
+		    float distance = 0, d1, d0;
+		    d0 = p->s.center.x - s->center.x;
+		    d1 = p->s.center.y - s->center.y;
+
+		    distance = sqrt(d0*d0 + d1*d1);
+		    if(distance <= s->radius){
+			p->velocity.y *= -.5;
+			if(p->s.center.x < s->center.x){
+			p->velocity.x += -.1;
+			}
+			
+			d0 /=distance;
+			d1 /=distance;
+			d0 *= s->radius *1.01;
+			d1 *= s->radius *1.01;
+			p->s.center.x = s->center.x + d0;
+			p->s.center.y = s->center.y + d1;
+			p->velocity.x += d0 * 0.00005;
+		
+			p->velocity.y += d1 * 0.00005;
+			}
+		}
 
 
 		//check for off-screen
@@ -346,7 +366,7 @@ void render(Game *game)
 	//Draw Circles
 	for(int i=0; i<2; i++){
 	        Shape *s;
-		glColor3ub(90,140,90);
+		glColor3ub(200,0,0);
 		s= &game->circle[i];
 
 		int triangles=40000;
